@@ -271,9 +271,9 @@ class PasswordField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'Password',
         suffixIcon: IconButton(
-          icon: const Icon(
-              // _passwordVisible ? Icons.visibility : Icons.visibility_off,
-              Icons.visibility),
+          icon: Icon(
+            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          ),
           onPressed: () {
             BlocProvider.of<LoginBloc>(context).add(TogglePasswordVisibility());
           },
