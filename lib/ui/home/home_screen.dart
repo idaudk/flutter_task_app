@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:task_app/blocs/home_bloc/home_bloc.dart';
 import 'package:task_app/routes/route_generator.dart';
+import 'package:task_app/ui/home/components/app_bar.dart';
+import 'package:task_app/ui/home/components/mood_counter_widget.dart';
 import 'package:task_app/ui/resources/reources.dart';
 import 'package:task_app/ui/widgets/animations/animations.dart';
 import 'package:task_app/ui/widgets/gap.dart';
@@ -256,85 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget Appbar(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              CupertinoIcons.sun_haze,
-              color: ColorManager.cyan,
-              size: AppSize.s25.r,
-            ),
-            Gap(AppSize.s5.w),
-            Text('Fri 30 Jun', style: context.textTheme.titleMedium)
-          ],
-        )),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.settings,
-                ),
-                color: ColorManager.cyan,
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        ColorManager.white), // Set the background color
-                    shape: MaterialStateProperty.all(CircleBorder())),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        )
-      ],
-    );
-  }
+
 }
 
-class MoodCounter extends StatelessWidget {
-  int counterValue;
-  IconData icon;
-  Color titleColor;
-  MoodCounter({
-    required this.counterValue,
-    required this.icon,
-    this.titleColor = ColorManager.cyan,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Container(
-      padding: EdgeInsets.symmetric(
-          vertical: AppSize.s20.h, horizontal: AppSize.s10.w),
-      decoration: BoxDecoration(
-          color: ColorManager.white,
-          borderRadius: BorderRadius.circular(AppSize.s17.r)),
-      child: Row(
-        children: [
-          Text(
-            counterValue.toString(),
-            style: context.textTheme.displayMedium!.copyWith(color: titleColor),
-          ),
-          Gap(AppSize.s5.w),
-          Text(
-            'happy days\nthis week',
-            style:
-                context.textTheme.bodySmall!.copyWith(fontSize: FontSize.s9.sp),
-          ),
-          Gap(AppSize.s5.w),
-          Icon(
-            icon,
-            color: ColorManager.yellow,
-            size: AppSize.s30.r,
-          )
-        ],
-      ),
-    ));
-  }
-}
