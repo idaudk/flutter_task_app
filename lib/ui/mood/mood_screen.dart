@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gif_view/gif_view.dart';
 import 'package:task_app/routes/route_generator.dart';
+import 'package:task_app/ui/mood/components/buttons.dart';
+import 'package:task_app/ui/mood/components/slider_path_widget.dart';
+import 'package:task_app/ui/mood/components/slider_thumb.dart';
 import 'package:task_app/ui/widgets/animations/animations.dart';
 import 'package:task_app/ui/widgets/gap.dart';
 
@@ -144,7 +147,7 @@ class _MoodScreenState extends State<MoodScreen> {
                                       );
                                     },
                                   ),
-                                  sliderPath()
+                                  const sliderPath()
                                 ],
                               ),
                             ),
@@ -212,178 +215,8 @@ class _MoodScreenState extends State<MoodScreen> {
   }
 }
 
-class sliderPath extends StatelessWidget {
-  const sliderPath({
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-            child: Container(
-          height: AppSize.s15.h,
-          decoration: BoxDecoration(
-              color: ColorManager.cyan.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppSize.s4.r)),
-        )),
-        Gap(AppSize.s5.w),
-        Expanded(
-            child: Container(
-          height: AppSize.s15.h,
-          decoration: BoxDecoration(
-              color: ColorManager.cyan.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppSize.s4.r)),
-        )),
-        Gap(AppSize.s5.w),
-        Expanded(
-            child: Container(
-          height: AppSize.s15.h,
-          decoration: BoxDecoration(
-              color: ColorManager.cyan.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppSize.s4.r)),
-        )),
-        Gap(AppSize.s5.w),
-        Expanded(
-            child: Container(
-          height: AppSize.s15.h,
-          decoration: BoxDecoration(
-              color: ColorManager.cyan.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppSize.s4.r)),
-        )),
-        Gap(AppSize.s5.w),
-        Expanded(
-            child: Container(
-          height: AppSize.s15.h,
-          decoration: BoxDecoration(
-              color: ColorManager.cyan.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(AppSize.s4.r)),
-        ))
-      ],
-    );
-  }
-}
 
-class Button extends StatelessWidget {
-  String text;
-  final Function()? onTap;
-  final Color bgColor;
-  final Color txtColor;
-  Button({
-    required this.text,
-    required this.onTap,
-    this.bgColor = ColorManager.cyan,
-    this.txtColor = ColorManager.white,
-    super.key,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.transparent,
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: AppSize.s12.h),
-        decoration: BoxDecoration(
-            color: bgColor, borderRadius: BorderRadius.circular(AppSize.s50.r)),
-        width: double.infinity,
-        child: Text(
-          text,
-          style: context.textTheme.bodyMedium!.copyWith(color: txtColor),
-        ),
-      ),
-    );
-  }
-}
 
-class RectSliderThumbShape extends SliderComponentShape {
-  final double enabledThumbRadius;
-  final double? disabledThumbRadius;
-  final double elevation;
-  final double pressedElevation;
-  final double borderRadius;
 
-  const RectSliderThumbShape({
-    this.enabledThumbRadius = 10.0,
-    this.disabledThumbRadius,
-    this.elevation = 1.0,
-    this.pressedElevation = 6.0,
-    this.borderRadius = 8.0, // Adjust the border radius as needed
-  });
-
-  double get _disabledThumbRadius => disabledThumbRadius ?? enabledThumbRadius;
-
-  @override
-  Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(
-        isEnabled == true ? enabledThumbRadius : _disabledThumbRadius);
-  }
-
-  @override
-  void paint(
-    PaintingContext context,
-    Offset center, {
-    required Animation<double> activationAnimation,
-    required Animation<double> enableAnimation,
-    required bool isDiscrete,
-    required TextPainter labelPainter,
-    required RenderBox parentBox,
-    required SliderThemeData sliderTheme,
-    required TextDirection textDirection,
-    required double value,
-    required double textScaleFactor,
-    required Size sizeWithOverflow,
-  }) {
-    assert(context != null);
-    assert(center != null);
-    assert(enableAnimation != null);
-    assert(sliderTheme != null);
-    assert(sliderTheme.disabledThumbColor != null);
-    assert(sliderTheme.thumbColor != null);
-
-    final Canvas canvas = context.canvas;
-    final Tween<double> radiusTween = Tween<double>(
-      begin: _disabledThumbRadius,
-      end: enabledThumbRadius,
-    );
-    final ColorTween colorTween = ColorTween(
-      begin: sliderTheme.disabledThumbColor,
-      end: sliderTheme.thumbColor,
-    );
-
-    final Color color = colorTween.evaluate(enableAnimation)!;
-    final double radius = radiusTween.evaluate(enableAnimation);
-
-    final Tween<double> elevationTween = Tween<double>(
-      begin: elevation,
-      end: pressedElevation,
-    );
-
-    final double evaluatedElevation =
-        elevationTween.evaluate(activationAnimation);
-
-    final Rect thumbRect = Rect.fromCenter(
-      center: center,
-      width: 1 * radius,
-      height: 3 * radius,
-    );
-
-    bool paintShadows = true;
-    assert(() {
-      if (debugDisableShadows) {
-        paintShadows = false;
-      }
-      return true;
-    }());
-
-    // if (paintShadows) {
-    //   canvas.drawShadow(thumbRect, Colors.black, evaluatedElevation, true);
-    // }
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(thumbRect, Radius.circular(borderRadius)),
-      Paint()..color = color,
-    );
-  }
-}
